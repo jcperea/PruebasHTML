@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+  iframe { border: 1px solid black; height: 60px; }
+</style>
+</head>
+<body>
+
+  <script type="text/javascript">
+    document.domain = 'urlquenoexiste.com';
+
+    var register = function ( ifr ) {
+      console.log('registrando ' + ifr.id );
+      window.addEventListener( 'message', function ( ev ) {
+        if ( ev.source === ifr.contentWindow && ev.origin === ifr.contentWindow.document.location.origin ) {
+          ifr.parentNode.children[2].value = ev.data;
+        }
+      }, false );
+    };
+
+    window.addEventListener( 'message', function ( ev ) {
+      if ( ev.source === window.parent && ev.origin === window.parent.document.location.origin ) {
+        document.getElementById('RECEIVE1').value = ev.data;
+      }
+    }, false );
+  </script>
+
+  <div>
+    <div>
+      <input id="RECEIVE1" type="text" disabled placeholder="mensaje desde principal" /><br/>
+      <input id="RECEIVE2" type="text" disabled placeholder="mensaje desde subframe" /><br/>
+      <iframe src="http://www.b.urlquenoexiste.com:9876/iframes/subframe.html" id="frame" onload="register(this)"></iframe><br/>
+      <input id="SEND" type="text" placeholder="mensaje a enviar" />
+      <button onclick="send('sub')">enviar a subframe</button>
+      <button onclick="send('xxx')">enviar a principal</button>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var CAJA = document.getElementById('SEND');
+
+    var send = function ( id ) {
+      var win, origin;
+
+      if ( id === 'xxx' ) {
+        win = window.parent;
+      } else {
+        win = document.getElementById('frame').contentWindow;
+      }
+      origin = win.document.location.origin;
+
+      win.postMessage( CAJA.value, origin );
+    };
+  </script>
+
+</body>
+</html>

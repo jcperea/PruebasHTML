@@ -1,0 +1,14 @@
+{
+  "name": "SERVIDOR",
+  "version": "0.0.0",
+  "description": "Servidor tonto express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.10.1"
+  }
+}

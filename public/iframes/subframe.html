@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+</style>
+</head>
+<body>
+  <script type="text/javascript">
+  document.domain = 'urlquenoexiste.com';
+  </script>
+  <div>
+    <input id="MSGFRAME"   type="text" disabled placeholder="desde FRAME" />
+  </div>
+  <div>
+    <input id="MSGTOFRAME" type="text" placeholder="a frame" />
+    <button onclick="send()">A FRAME</button>
+  </div>
+
+  <script type="text/javascript">
+    var CAJA = document.getElementById('MSGTOFRAME');
+
+    var send = function ( ) {
+      var win, origin;
+
+      win = window.parent;
+      origin = win.document.location.origin;
+
+      win.postMessage( CAJA.value, origin );
+    };
+
+    window.addEventListener( 'message', function ( ev ) {
+      if ( ev.source === window.parent && ev.origin === window.parent.document.location.origin ) {
+        document.getElementById('MSGFRAME').value = ev.data;
+      }
+    }, false );
+  </script>
+</body>
+</html>

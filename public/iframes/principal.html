@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style type="text/css">
+    iframe {
+      width: 100%;
+      border: 1px solid red;
+      margin: 10px 0px;
+      height: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <script type="text/javascript">
+    document.domain = 'urlquenoexiste.com';
+    var register = function ( ifr ) {
+      console.log('registrando ' + ifr.id );
+      window.addEventListener( 'message', function ( ev ) {
+        if ( ev.source === ifr.contentWindow && ev.origin === ifr.contentWindow.document.location.origin ) {
+          ifr.parentNode.children[2].value = ev.data;
+        }
+      }, false );
+    };
+  </script>
+
+  <div>
+    <div>
+      <iframe id="IF1" src="http://www.a.urlquenoexiste.com:9876/iframes/frame.html" onload="register(this)"></iframe><br/>
+      <input type="text" id="MSG1" disabled placeholder="mensajes desde iframe 1" />
+    </div>
+    <br/>
+    <div>
+      <iframe id="IF2" src="frame.html" onload="register(this)"></iframe><br/>
+      <input type="text" id="MSG2" disabled placeholder="mensajes desde iframe 2"/>
+    </div>
+    <br/>
+    <br/>
+    <div>
+      <input type="text" id="CAJA" />
+      <button onclick="send('if1')">enviar a iframe 1</button>
+      <button onclick="send('if2')">enviar a iframe 2</button>
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+    var CAJA = document.getElementById('CAJA');
+
+    // var MSG1 = document.getElementById('MSG1');
+    // var MSG2 = document.getElementById('MSG2');
+
+    var IF1 = document.getElementById('IF1');
+    var IF2 = document.getElementById('IF2');
+
+    var send = function ( id ) {
+      var frame = window[id.toUpperCase()];
+      var win = frame.contentWindow;
+      win.postMessage( CAJA.value, win.document.location.origin );
+    };
+  </script>
+</body>
+</html>
